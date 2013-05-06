@@ -56,6 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dnsSniffer.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>dnsSniffer.xsd</DependentUpon>
+    </Compile>
     <Compile Include="Dns\Header.cs" />
     <Compile Include="Dns\Question.cs" />
     <Compile Include="Dns\RecordReader.cs" />
@@ -136,6 +141,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -146,6 +152,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="app.config" />
+    <None Include="dnsSniffer.xsc">
+      <DependentUpon>dnsSniffer.xsd</DependentUpon>
+    </None>
+    <None Include="dnsSniffer.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dnsSniffer.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="dnsSniffer.xss">
+      <DependentUpon>dnsSniffer.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

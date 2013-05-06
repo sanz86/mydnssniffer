@@ -16,12 +16,17 @@ namespace MyDnsSniffer
 {
     public partial class Form1 : Form
     {
+        dnsSnifferTableAdapters.req_tableTableAdapter reqta = new MyDnsSniffer.dnsSnifferTableAdapters.req_tableTableAdapter();
+        dnsSnifferTableAdapters.additional_host_ipTableAdapter addta = new MyDnsSniffer.dnsSnifferTableAdapters.additional_host_ipTableAdapter();
+        dnsSnifferTableAdapters.host_ipTableAdapter hostta = new MyDnsSniffer.dnsSnifferTableAdapters.host_ipTableAdapter();
         CaptureDeviceList devices;
         ICaptureDevice device;
+        public static int r_id;
         public Form1()
         {
             InitializeComponent();
             Console.SetOut(new FeedbackWriter(this.textBox1));
+            r_id = 1;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -29,21 +34,14 @@ namespace MyDnsSniffer
 
             // Stop the capturing process
             device.StopCapture();
-
+            
             // Close the pcap device
             device.Close();
         }
         private static void device_OnPacketArrival(object sender, CaptureEventArgs e)
         {
-            //var time = e.Packet.Timeval.Date;
-            //var len = e.Packet.Data.Length;
-            ////MessageBox.Show("hi");
-            //Console.WriteLine("{0}:{1}:{2},{3} Len={4}",
-            //    time.Hour, time.Minute, time.Second, time.Millisecond, len);
-            //Console.WriteLine(e.Packet.ToString());
-            var time = e.Packet.Timeval.Date;
-            var len = e.Packet.Data.Length;
-
+            DateTime time = e.Packet.Timeval.Date;
+           
             var packet = PacketDotNet.Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data);
 
             var udpPacket = PacketDotNet.UdpPacket.GetEncapsulated(packet); //PacketDotNet.TcpPacket.GetEncapsulated(packet);
@@ -51,7 +49,11 @@ namespace MyDnsSniffer
             {
                 var ipPacket = (PacketDotNet.IpPacket)udpPacket.ParentPacket;
                 System.Net.IPAddress srcIp = ipPacket.SourceAddress;
+
                 System.Net.IPAddress dstIp = ipPacket.DestinationAddress;
+
+               // MessageBox.Show(srcIp.ToString() + "  " + dstIp.ToString());
+
                 int srcPort = udpPacket.SourcePort;
                 int dstPort = udpPacket.DestinationPort;
                 if ((srcPort == 53) || (dstPort == 53))
@@ -106,8 +108,23 @@ namespace MyDnsSniffer
                             Console.WriteLine(additionalRR);
                         Console.WriteLine("");
                     }
+                    if ((response.header.QR == false))// && srcIp == IPAddress.Parse("10.12.11.74"))
+                    {
+                        dnsSnifferTableAdapters.req_tableTableAdapter reqta = new MyDnsSniffer.dnsSnifferTableAdapters.req_tableTableAdapter();
+                        reqta.Insert( Convert.ToDecimal(response.header.ID),Convert.ToDecimal(srcPort),dstIp.ToString(),response.Questions[0].QName.ToString());   
+                    }
+                    else if ((response.header.QR == true))// && dstIp == IPAddress.Parse("10.12.11.74"))
+                    {
+                        dnsSnifferTableAdapters.res_tableTableAdapter resta = new MyDnsSniffer.dnsSnifferTableAdapters.res_tableTableAdapter();
+      
+                        foreach (AnswerRR answerRR in response.Answers)
+                        {
+                            resta.Insert(Convert.ToDecimal(response.header.ID),Convert.ToDecimal(dstPort),srcIp.ToString(),r_id,answerRR.NAME.ToString(),answerRR.RECORD.ToString(),time);
+                        }
 
+                    }
 
+                  
                 }
             }
 
@@ -115,6 +132,7 @@ namespace MyDnsSniffer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            
             // Print SharpPcap version 
             string ver = SharpPcap.Version.VersionString;
             Console.WriteLine("SharpPcap {0}, Example1.IfList.cs", ver);
