@@ -56,6 +56,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="classes\compare.cs" />
+    <Compile Include="classes\deleter.cs" />
+    <Compile Include="classes\host_ip.cs" />
+    <Compile Include="classes\req.cs" />
+    <Compile Include="classes\res.cs" />
     <Compile Include="classes\sniffer.cs" />
     <Compile Include="dnsSniffer.Designer.cs">
       <AutoGen>True</AutoGen>

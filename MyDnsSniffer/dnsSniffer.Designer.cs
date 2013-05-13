@@ -368,6 +368,8 @@ namespace MyDnsSniffer {
             
             private global::System.Data.DataColumn columnhost_name;
             
+            private global::System.Data.DataColumn columntimestamp;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             public req_tableDataTable() {
                 this.TableName = "req_table";
@@ -434,6 +436,13 @@ namespace MyDnsSniffer {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public global::System.Data.DataColumn timestampColumn {
+                get {
+                    return this.columntimestamp;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -462,14 +471,15 @@ namespace MyDnsSniffer {
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            public req_tableRow Addreq_tableRow(decimal t_id, decimal port, string dest_ip, string host_name) {
+            public req_tableRow Addreq_tableRow(decimal t_id, decimal port, string dest_ip, string host_name, System.DateTime timestamp) {
                 req_tableRow rowreq_tableRow = ((req_tableRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
                         null,
                         t_id,
                         port,
                         dest_ip,
-                        host_name};
+                        host_name,
+                        timestamp};
                 rowreq_tableRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowreq_tableRow);
                 return rowreq_tableRow;
@@ -500,6 +510,7 @@ namespace MyDnsSniffer {
                 this.columnport = base.Columns["port"];
                 this.columndest_ip = base.Columns["dest_ip"];
                 this.columnhost_name = base.Columns["host_name"];
+                this.columntimestamp = base.Columns["timestamp"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -514,6 +525,8 @@ namespace MyDnsSniffer {
                 base.Columns.Add(this.columndest_ip);
                 this.columnhost_name = new global::System.Data.DataColumn("host_name", typeof(string), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columnhost_name);
+                this.columntimestamp = new global::System.Data.DataColumn("timestamp", typeof(global::System.DateTime), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columntimestamp);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("Constraint1", new global::System.Data.DataColumn[] {
                                 this.columnId}, true));
                 this.columnId.AutoIncrement = true;
@@ -528,6 +541,7 @@ namespace MyDnsSniffer {
                 this.columndest_ip.MaxLength = 50;
                 this.columnhost_name.AllowDBNull = false;
                 this.columnhost_name.MaxLength = 300;
+                this.columntimestamp.AllowDBNull = false;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1554,6 +1568,16 @@ namespace MyDnsSniffer {
                     this[this.tablereq_table.host_nameColumn] = value;
                 }
             }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            public System.DateTime timestamp {
+                get {
+                    return ((global::System.DateTime)(this[this.tablereq_table.timestampColumn]));
+                }
+                set {
+                    this[this.tablereq_table.timestampColumn] = value;
+                }
+            }
         }
         
         /// <summary>
@@ -1989,42 +2013,47 @@ namespace MyDnsSniffer.dnsSnifferTableAdapters {
             tableMapping.ColumnMappings.Add("port", "port");
             tableMapping.ColumnMappings.Add("dest_ip", "dest_ip");
             tableMapping.ColumnMappings.Add("host_name", "host_name");
+            tableMapping.ColumnMappings.Add("timestamp", "timestamp");
             this._adapter.TableMappings.Add(tableMapping);
             this._adapter.DeleteCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.DeleteCommand.Connection = this.Connection;
-            this._adapter.DeleteCommand.CommandText = "DELETE FROM [dbo].[req_table] WHERE (([Id] = @Original_Id) AND ([t_id] = @Origina" +
-                "l_t_id) AND ([port] = @Original_port) AND ([dest_ip] = @Original_dest_ip) AND ([" +
-                "host_name] = @Original_host_name))";
+            this._adapter.DeleteCommand.CommandText = "DELETE FROM [req_table] WHERE (([Id] = @Original_Id) AND ([t_id] = @Original_t_id" +
+                ") AND ([port] = @Original_port) AND ([dest_ip] = @Original_dest_ip) AND ([host_n" +
+                "ame] = @Original_host_name) AND ([timestamp] = @Original_timestamp))";
             this._adapter.DeleteCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_t_id", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 10, 0, "t_id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_port", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 8, 0, "port", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_dest_ip", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "dest_ip", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_host_name", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "host_name", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.DeleteCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_timestamp", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "timestamp", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.InsertCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.InsertCommand.Connection = this.Connection;
-            this._adapter.InsertCommand.CommandText = "INSERT INTO [dbo].[req_table] ([t_id], [port], [dest_ip], [host_name]) VALUES (@t" +
-                "_id, @port, @dest_ip, @host_name);\r\nSELECT Id, t_id, port, dest_ip, host_name FR" +
-                "OM req_table WHERE (Id = SCOPE_IDENTITY())";
+            this._adapter.InsertCommand.CommandText = "INSERT INTO [req_table] ([t_id], [port], [dest_ip], [host_name], [timestamp]) VAL" +
+                "UES (@t_id, @port, @dest_ip, @host_name, @timestamp);\r\nSELECT Id, t_id, port, de" +
+                "st_ip, host_name, timestamp FROM req_table WHERE (Id = SCOPE_IDENTITY())";
             this._adapter.InsertCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@t_id", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 10, 0, "t_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@port", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 8, 0, "port", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@dest_ip", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "dest_ip", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "host_name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.InsertCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@timestamp", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "timestamp", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand = new global::System.Data.SqlClient.SqlCommand();
             this._adapter.UpdateCommand.Connection = this.Connection;
-            this._adapter.UpdateCommand.CommandText = @"UPDATE [dbo].[req_table] SET [t_id] = @t_id, [port] = @port, [dest_ip] = @dest_ip, [host_name] = @host_name WHERE (([Id] = @Original_Id) AND ([t_id] = @Original_t_id) AND ([port] = @Original_port) AND ([dest_ip] = @Original_dest_ip) AND ([host_name] = @Original_host_name));
-SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
+            this._adapter.UpdateCommand.CommandText = @"UPDATE [req_table] SET [t_id] = @t_id, [port] = @port, [dest_ip] = @dest_ip, [host_name] = @host_name, [timestamp] = @timestamp WHERE (([Id] = @Original_Id) AND ([t_id] = @Original_t_id) AND ([port] = @Original_port) AND ([dest_ip] = @Original_dest_ip) AND ([host_name] = @Original_host_name) AND ([timestamp] = @Original_timestamp));
+SELECT Id, t_id, port, dest_ip, host_name, timestamp FROM req_table WHERE (Id = @Id)";
             this._adapter.UpdateCommand.CommandType = global::System.Data.CommandType.Text;
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@t_id", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 10, 0, "t_id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@port", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 8, 0, "port", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@dest_ip", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "dest_ip", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "host_name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@timestamp", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "timestamp", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 0, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_t_id", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 10, 0, "t_id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_port", global::System.Data.SqlDbType.Decimal, 0, global::System.Data.ParameterDirection.Input, 8, 0, "port", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_dest_ip", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "dest_ip", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_host_name", global::System.Data.SqlDbType.NVarChar, 0, global::System.Data.ParameterDirection.Input, 0, 0, "host_name", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_timestamp", global::System.Data.SqlDbType.DateTime, 0, global::System.Data.ParameterDirection.Input, 0, 0, "timestamp", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._adapter.UpdateCommand.Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
@@ -2036,11 +2065,23 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
-            this._commandCollection[0].CommandText = "SELECT Id, t_id, port, dest_ip, host_name FROM dbo.req_table";
+            this._commandCollection[0].CommandText = "SELECT        Id, t_id, port, dest_ip, host_name, timestamp\r\nFROM            req_" +
+                "table";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "DELETE FROM req_table\r\nWHERE  (timestamp < @Original_timestamp)";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_timestamp", global::System.Data.SqlDbType.DateTime, 8, global::System.Data.ParameterDirection.Input, 0, 0, "timestamp", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT Id, dest_ip, host_name, port, t_id, timestamp FROM req_table WHERE (host_n" +
+                "ame = @host_name)";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name", global::System.Data.SqlDbType.NVarChar, 300, global::System.Data.ParameterDirection.Input, 0, 0, "host_name", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2060,6 +2101,40 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual dnsSniffer.req_tableDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
+            dnsSniffer.req_tableDataTable dataTable = new dnsSniffer.req_tableDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillByHostName(dnsSniffer.req_tableDataTable dataTable, string host_name) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            if ((host_name == null)) {
+                throw new global::System.ArgumentNullException("host_name");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(host_name));
+            }
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual dnsSniffer.req_tableDataTable GetDataByHostName(string host_name) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            if ((host_name == null)) {
+                throw new global::System.ArgumentNullException("host_name");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(host_name));
+            }
             dnsSniffer.req_tableDataTable dataTable = new dnsSniffer.req_tableDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -2093,7 +2168,7 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, true)]
-        public virtual int Delete(int Original_Id, decimal Original_t_id, decimal Original_port, string Original_dest_ip, string Original_host_name) {
+        public virtual int Delete(int Original_Id, decimal Original_t_id, decimal Original_port, string Original_dest_ip, string Original_host_name, System.DateTime Original_timestamp) {
             this.Adapter.DeleteCommand.Parameters[0].Value = ((int)(Original_Id));
             this.Adapter.DeleteCommand.Parameters[1].Value = ((decimal)(Original_t_id));
             this.Adapter.DeleteCommand.Parameters[2].Value = ((decimal)(Original_port));
@@ -2109,6 +2184,7 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
             else {
                 this.Adapter.DeleteCommand.Parameters[4].Value = ((string)(Original_host_name));
             }
+            this.Adapter.DeleteCommand.Parameters[5].Value = ((System.DateTime)(Original_timestamp));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.DeleteCommand.Connection.State;
             if (((this.Adapter.DeleteCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2128,7 +2204,7 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Insert, true)]
-        public virtual int Insert(decimal t_id, decimal port, string dest_ip, string host_name) {
+        public virtual int Insert(decimal t_id, decimal port, string dest_ip, string host_name, System.DateTime timestamp) {
             this.Adapter.InsertCommand.Parameters[0].Value = ((decimal)(t_id));
             this.Adapter.InsertCommand.Parameters[1].Value = ((decimal)(port));
             if ((dest_ip == null)) {
@@ -2143,6 +2219,7 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
             else {
                 this.Adapter.InsertCommand.Parameters[3].Value = ((string)(host_name));
             }
+            this.Adapter.InsertCommand.Parameters[4].Value = ((System.DateTime)(timestamp));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.InsertCommand.Connection.State;
             if (((this.Adapter.InsertCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2162,7 +2239,7 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(decimal t_id, decimal port, string dest_ip, string host_name, int Original_Id, decimal Original_t_id, decimal Original_port, string Original_dest_ip, string Original_host_name, int Id) {
+        public virtual int Update(decimal t_id, decimal port, string dest_ip, string host_name, System.DateTime timestamp, int Original_Id, decimal Original_t_id, decimal Original_port, string Original_dest_ip, string Original_host_name, System.DateTime Original_timestamp, int Id) {
             this.Adapter.UpdateCommand.Parameters[0].Value = ((decimal)(t_id));
             this.Adapter.UpdateCommand.Parameters[1].Value = ((decimal)(port));
             if ((dest_ip == null)) {
@@ -2177,22 +2254,24 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
             else {
                 this.Adapter.UpdateCommand.Parameters[3].Value = ((string)(host_name));
             }
-            this.Adapter.UpdateCommand.Parameters[4].Value = ((int)(Original_Id));
-            this.Adapter.UpdateCommand.Parameters[5].Value = ((decimal)(Original_t_id));
-            this.Adapter.UpdateCommand.Parameters[6].Value = ((decimal)(Original_port));
+            this.Adapter.UpdateCommand.Parameters[4].Value = ((System.DateTime)(timestamp));
+            this.Adapter.UpdateCommand.Parameters[5].Value = ((int)(Original_Id));
+            this.Adapter.UpdateCommand.Parameters[6].Value = ((decimal)(Original_t_id));
+            this.Adapter.UpdateCommand.Parameters[7].Value = ((decimal)(Original_port));
             if ((Original_dest_ip == null)) {
                 throw new global::System.ArgumentNullException("Original_dest_ip");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[7].Value = ((string)(Original_dest_ip));
+                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_dest_ip));
             }
             if ((Original_host_name == null)) {
                 throw new global::System.ArgumentNullException("Original_host_name");
             }
             else {
-                this.Adapter.UpdateCommand.Parameters[8].Value = ((string)(Original_host_name));
+                this.Adapter.UpdateCommand.Parameters[9].Value = ((string)(Original_host_name));
             }
-            this.Adapter.UpdateCommand.Parameters[9].Value = ((int)(Id));
+            this.Adapter.UpdateCommand.Parameters[10].Value = ((System.DateTime)(Original_timestamp));
+            this.Adapter.UpdateCommand.Parameters[11].Value = ((int)(Id));
             global::System.Data.ConnectionState previousConnectionState = this.Adapter.UpdateCommand.Connection.State;
             if (((this.Adapter.UpdateCommand.Connection.State & global::System.Data.ConnectionState.Open) 
                         != global::System.Data.ConnectionState.Open)) {
@@ -2212,8 +2291,31 @@ SELECT Id, t_id, port, dest_ip, host_name FROM req_table WHERE (Id = @Id)";
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
-        public virtual int Update(decimal t_id, decimal port, string dest_ip, string host_name, int Original_Id, decimal Original_t_id, decimal Original_port, string Original_dest_ip, string Original_host_name) {
-            return this.Update(t_id, port, dest_ip, host_name, Original_Id, Original_t_id, Original_port, Original_dest_ip, Original_host_name, Original_Id);
+        public virtual int Update(decimal t_id, decimal port, string dest_ip, string host_name, System.DateTime timestamp, int Original_Id, decimal Original_t_id, decimal Original_port, string Original_dest_ip, string Original_host_name, System.DateTime Original_timestamp) {
+            return this.Update(t_id, port, dest_ip, host_name, timestamp, Original_Id, Original_t_id, Original_port, Original_dest_ip, Original_host_name, Original_timestamp, Original_Id);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
+        public virtual int DeleteQueryTime(System.DateTime Original_timestamp) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
+            command.Parameters[0].Value = ((System.DateTime)(Original_timestamp));
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
         }
     }
     
@@ -2396,12 +2498,23 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timesta" +
                 "mp FROM dbo.res_table";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT        Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, " +
+                "timestamp\r\nFROM            res_table\r\nWHERE        (host_name_res = @host_name_r" +
+                "es)";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name_res", global::System.Data.SqlDbType.NVarChar, 300, global::System.Data.ParameterDirection.Input, 0, 0, "host_name_res", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[2].Connection = this.Connection;
+            this._commandCollection[2].CommandText = "SELECT TOP 1 * FROM dbo.res_table";
+            this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2418,9 +2531,55 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
-        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
-        public virtual dnsSniffer.res_tableDataTable GetData() {
-            this.Adapter.SelectCommand = this.CommandCollection[0];
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillByHost(dnsSniffer.res_tableDataTable dataTable, string host_name_res) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            if ((host_name_res == null)) {
+                throw new global::System.ArgumentNullException("host_name_res");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(host_name_res));
+            }
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual dnsSniffer.res_tableDataTable GetDataByHost(string host_name_res) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            if ((host_name_res == null)) {
+                throw new global::System.ArgumentNullException("host_name_res");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(host_name_res));
+            }
+            dnsSniffer.res_tableDataTable dataTable = new dnsSniffer.res_tableDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillByTop(dnsSniffer.res_tableDataTable dataTable) {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual dnsSniffer.res_tableDataTable GetDataByTop() {
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             dnsSniffer.res_tableDataTable dataTable = new dnsSniffer.res_tableDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -2763,11 +2922,17 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[1];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[2];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT res_id, host_name_res, ip_res FROM dbo.host_ip";
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[1].Connection = this.Connection;
+            this._commandCollection[1].CommandText = "SELECT        res_id, host_name_res, ip_res\r\nFROM            host_ip\r\nWHERE      " +
+                "  (host_name_res = @host_name_res)";
+            this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name_res", global::System.Data.SqlDbType.NVarChar, 300, global::System.Data.ParameterDirection.Input, 0, 0, "host_name_res", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2787,6 +2952,40 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, true)]
         public virtual dnsSniffer.host_ipDataTable GetData() {
             this.Adapter.SelectCommand = this.CommandCollection[0];
+            dnsSniffer.host_ipDataTable dataTable = new dnsSniffer.host_ipDataTable();
+            this.Adapter.Fill(dataTable);
+            return dataTable;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
+        public virtual int FillByHost(dnsSniffer.host_ipDataTable dataTable, string host_name_res) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            if ((host_name_res == null)) {
+                throw new global::System.ArgumentNullException("host_name_res");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(host_name_res));
+            }
+            if ((this.ClearBeforeFill == true)) {
+                dataTable.Clear();
+            }
+            int returnValue = this.Adapter.Fill(dataTable);
+            return returnValue;
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
+        public virtual dnsSniffer.host_ipDataTable GetDataByHost(string host_name_res) {
+            this.Adapter.SelectCommand = this.CommandCollection[1];
+            if ((host_name_res == null)) {
+                throw new global::System.ArgumentNullException("host_name_res");
+            }
+            else {
+                this.Adapter.SelectCommand.Parameters[0].Value = ((string)(host_name_res));
+            }
             dnsSniffer.host_ipDataTable dataTable = new dnsSniffer.host_ipDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;

@@ -12,6 +12,7 @@ using Heijden.DNS;
 using System.Net;
 using DnsDig;
 using MyDnsSniffer.classes;
+using System.Threading;
 
 namespace MyDnsSniffer
 {
@@ -21,23 +22,37 @@ namespace MyDnsSniffer
         {
             InitializeComponent();
             Console.SetOut(new FeedbackWriter(this.textBox1));
-            r_id = 1;
+            Thread delet = new Thread(new ThreadStart(classes.deleter.delete));
+            delet.IsBackground = true;
+            //delet.Start();
+            classes.compare compr = new compare();
+            Thread comp = new Thread(new ThreadStart(compr.compar));
+            comp.Start();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-
-            // Stop the capturing process
-            device.StopCapture();
-            
+            try
+            {
+                // Stop the capturing process
+                classes.sniffer.device.StopCapture();
+            }
+            catch { }
             // Close the pcap device
-            device.Close();
+           classes.sniffer.device.Close();
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             
             
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            sniffer a = new sniffer();
+            a.sniff();
         }
     }
 }
