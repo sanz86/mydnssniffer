@@ -24,7 +24,7 @@ namespace MyDnsSniffer.classes
             ri = 0;
             hn = "";
             ipr = "";
-            tm = null;
+            tm = DateTime.Now;
         }
         public int Id
         {
@@ -115,5 +115,7 @@ namespace MyDnsSniffer.classes
                 tm = value;
             }
         }
+
+      
     }
 }

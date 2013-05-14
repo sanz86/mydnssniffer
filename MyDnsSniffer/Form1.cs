@@ -25,22 +25,60 @@ namespace MyDnsSniffer
             Thread delet = new Thread(new ThreadStart(classes.deleter.delete));
             delet.IsBackground = true;
             //delet.Start();
-            classes.compare compr = new compare();
+           /* classes.compare compr = new compare();
             Thread comp = new Thread(new ThreadStart(compr.compar));
-            comp.Start();
+            comp.Start();*/
 
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try
+            //List<List<int>> a = new List<List<int>>();
+            //List<int> b;
+            //for (int i = 1; i < 5; i++)
+            //{
+            //    b = new List<int>();
+            //    for (int j = 1; j < 5; j++)
+            //    {
+            //        b.Add(i * j);
+
+            //    }
+            //    a.Add(b);
+            //}
+
+            //foreach (List<int> aa in a)
+            //{
+            //    foreach (int aaaa in aa)
+            //        Console.WriteLine("{0}", aaaa);
+            //}
+            //int d = 0;
+            //foreach (List<int> aa in a)
+            //{
+            //    if (d == 1)
+            //    {
+            //        a.Remove(aa);
+            //        break;
+            //    }
+            //    d++;
+            //    //foreach (int aaaa in aa)
+            //        //Console.WriteLine("{0}", aaaa);
+            //}
+            //foreach (List<int> aa in a)
+            //{
+            //    foreach (int aaaa in aa)
+            //        Console.WriteLine("{0}", aaaa);
+            //}
+
+            compare a = new compare();
+            a.analyse_host("jatinga.iitg.ernet.in.");
+            /*try
             {
                 // Stop the capturing process
                 classes.sniffer.device.StopCapture();
             }
             catch { }
             // Close the pcap device
-           classes.sniffer.device.Close();
+           classes.sniffer.device.Close();*/
         }
 
         private void Form1_Load(object sender, EventArgs e)

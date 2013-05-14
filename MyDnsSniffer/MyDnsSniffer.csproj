@@ -57,7 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="classes\compare.cs" />
+    <Compile Include="classes\dataAdapter.cs" />
     <Compile Include="classes\deleter.cs" />
+    <Compile Include="classes\helpclasses.cs" />
     <Compile Include="classes\host_ip.cs" />
     <Compile Include="classes\req.cs" />
     <Compile Include="classes\res.cs" />
