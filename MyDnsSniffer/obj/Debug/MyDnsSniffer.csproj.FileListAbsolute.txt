@@ -1,5 +1,4 @@
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\ResolveAssemblyReference.cache
-E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\MyDnsSniffer.Form1.resources
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\MyDnsSniffer.Properties.Resources.resources
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\MyDnsSniffer.csproj.GenerateResource.Cache
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\bin\Debug\MyDnsSniffer.exe
@@ -11,3 +10,4 @@ E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\bin
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\MyDnsSniffer.exe
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\MyDnsSniffer.pdb
 E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\bin\Debug\MyDnsSniffer.exe.config
+E:\CoUrSe\M TECH\IIT GUWAHATI\Final Sem\MTP 2\Code\MyDnsSniffer\MyDnsSniffer\obj\Debug\MyDnsSniffer.mainForm.resources

@@ -2498,7 +2498,7 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         private void InitCommandCollection() {
-            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[3];
+            this._commandCollection = new global::System.Data.SqlClient.SqlCommand[4];
             this._commandCollection[0] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[0].Connection = this.Connection;
             this._commandCollection[0].CommandText = "SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timesta" +
@@ -2506,15 +2506,20 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
             this._commandCollection[0].CommandType = global::System.Data.CommandType.Text;
             this._commandCollection[1] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[1].Connection = this.Connection;
-            this._commandCollection[1].CommandText = "SELECT        Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, " +
-                "timestamp\r\nFROM            res_table\r\nWHERE        (host_name_res = @host_name_r" +
-                "es)";
+            this._commandCollection[1].CommandText = "DELETE FROM res_table\r\nWHERE        (Id = @Original_Id) ";
             this._commandCollection[1].CommandType = global::System.Data.CommandType.Text;
-            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name_res", global::System.Data.SqlDbType.NVarChar, 300, global::System.Data.ParameterDirection.Input, 0, 0, "host_name_res", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[1].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@Original_Id", global::System.Data.SqlDbType.Int, 4, global::System.Data.ParameterDirection.Input, 0, 0, "Id", global::System.Data.DataRowVersion.Original, false, null, "", "", ""));
             this._commandCollection[2] = new global::System.Data.SqlClient.SqlCommand();
             this._commandCollection[2].Connection = this.Connection;
-            this._commandCollection[2].CommandText = "SELECT TOP 1 * FROM dbo.res_table";
+            this._commandCollection[2].CommandText = "SELECT        Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, " +
+                "timestamp\r\nFROM            res_table\r\nWHERE        (host_name_res = @host_name_r" +
+                "es)";
             this._commandCollection[2].CommandType = global::System.Data.CommandType.Text;
+            this._commandCollection[2].Parameters.Add(new global::System.Data.SqlClient.SqlParameter("@host_name_res", global::System.Data.SqlDbType.NVarChar, 300, global::System.Data.ParameterDirection.Input, 0, 0, "host_name_res", global::System.Data.DataRowVersion.Current, false, null, "", "", ""));
+            this._commandCollection[3] = new global::System.Data.SqlClient.SqlCommand();
+            this._commandCollection[3].Connection = this.Connection;
+            this._commandCollection[3].CommandText = "SELECT TOP 1 * FROM dbo.res_table";
+            this._commandCollection[3].CommandType = global::System.Data.CommandType.Text;
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -2533,7 +2538,7 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
         public virtual int FillByHost(dnsSniffer.res_tableDataTable dataTable, string host_name_res) {
-            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             if ((host_name_res == null)) {
                 throw new global::System.ArgumentNullException("host_name_res");
             }
@@ -2551,7 +2556,7 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
         public virtual dnsSniffer.res_tableDataTable GetDataByHost(string host_name_res) {
-            this.Adapter.SelectCommand = this.CommandCollection[1];
+            this.Adapter.SelectCommand = this.CommandCollection[2];
             if ((host_name_res == null)) {
                 throw new global::System.ArgumentNullException("host_name_res");
             }
@@ -2567,7 +2572,7 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Fill, false)]
         public virtual int FillByTop(dnsSniffer.res_tableDataTable dataTable) {
-            this.Adapter.SelectCommand = this.CommandCollection[2];
+            this.Adapter.SelectCommand = this.CommandCollection[3];
             if ((this.ClearBeforeFill == true)) {
                 dataTable.Clear();
             }
@@ -2579,7 +2584,7 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Select, false)]
         public virtual dnsSniffer.res_tableDataTable GetDataByTop() {
-            this.Adapter.SelectCommand = this.CommandCollection[2];
+            this.Adapter.SelectCommand = this.CommandCollection[3];
             dnsSniffer.res_tableDataTable dataTable = new dnsSniffer.res_tableDataTable();
             this.Adapter.Fill(dataTable);
             return dataTable;
@@ -2782,6 +2787,29 @@ SELECT Id, t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timest
         [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Update, true)]
         public virtual int Update(decimal t_id_res, decimal port_res, string src_ip_res, int res_id, string host_name_res, string ip_res, System.DateTime timestamp, int Original_Id, decimal Original_t_id_res, decimal Original_port_res, string Original_src_ip_res, int Original_res_id, string Original_host_name_res, string Original_ip_res, System.DateTime Original_timestamp) {
             return this.Update(t_id_res, port_res, src_ip_res, res_id, host_name_res, ip_res, timestamp, Original_Id, Original_t_id_res, Original_port_res, Original_src_ip_res, Original_res_id, Original_host_name_res, Original_ip_res, Original_timestamp, Original_Id);
+        }
+        
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.ComponentModel.Design.HelpKeywordAttribute("vs.data.TableAdapter")]
+        [global::System.ComponentModel.DataObjectMethodAttribute(global::System.ComponentModel.DataObjectMethodType.Delete, false)]
+        public virtual int DeleteQueryId(int Original_Id) {
+            global::System.Data.SqlClient.SqlCommand command = this.CommandCollection[1];
+            command.Parameters[0].Value = ((int)(Original_Id));
+            global::System.Data.ConnectionState previousConnectionState = command.Connection.State;
+            if (((command.Connection.State & global::System.Data.ConnectionState.Open) 
+                        != global::System.Data.ConnectionState.Open)) {
+                command.Connection.Open();
+            }
+            int returnValue;
+            try {
+                returnValue = command.ExecuteNonQuery();
+            }
+            finally {
+                if ((previousConnectionState == global::System.Data.ConnectionState.Closed)) {
+                    command.Connection.Close();
+                }
+            }
+            return returnValue;
         }
     }
     
